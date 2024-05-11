@@ -8,7 +8,7 @@ pipeline TreePipeline {
         -> TreeLoader;
 
     block TreeFileExtractor oftype LocalFileExtractor {
-        filePath: "./stadt-neuss-herbstpflanzung-2023.csv";
+        filePath: "exercises\stadt-neuss-herbstpflanzung-2023.csv";
     }
 
     block TreeTextFileInterpreter oftype TextFileInterpreter {}
