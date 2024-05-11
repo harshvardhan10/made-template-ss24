@@ -1,14 +1,14 @@
 pipeline TreePipeline {
 
-    TreeFileExtractor
+    TreeExtractor
         -> TreeTextFileInterpreter
         -> TreeCSVInterpreter
         -> BaumartDeutschColumnDeleter 
         -> TreeTableInterpreter
         -> TreeLoader;
 
-    block TreeFileExtractor oftype LocalFileExtractor {
-        filePath: "exercises\stadt-neuss-herbstpflanzung-2023.csv";
+    block TreeExtractor oftype HttpExtractor {
+        url: "https://opendata.rhein-kreis-neuss.de/api/v2/catalog/datasets/stadt-neuss-herbstpflanzung-2023/exports/csv";
     }
 
     block TreeTextFileInterpreter oftype TextFileInterpreter {}
