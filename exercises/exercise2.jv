@@ -1,0 +1,59 @@
+pipeline TreePipeline {
+
+    TreeFileExtractor
+        -> TreeTextFileInterpreter
+        -> TreeCSVInterpreter
+        -> BaumartDeutschColumnDeleter 
+        -> TreeTableInterpreter
+        -> TreeLoader;
+
+    block TreeFileExtractor oftype LocalFileExtractor {
+        filePath: "./stadt-neuss-herbstpflanzung-2023.csv";
+    }
+
+    block TreeTextFileInterpreter oftype TextFileInterpreter {}
+    
+    block TreeCSVInterpreter oftype CSVInterpreter {
+        delimiter: ';';
+    }
+
+    // delete baumart_deutsch column
+    block BaumartDeutschColumnDeleter oftype ColumnDeleter {
+        delete: [column E];
+    }
+    
+    block TreeTableInterpreter oftype TableInterpreter {
+        header: true;
+        columns: [
+            "lfd_nr" oftype integer,
+            "stadtteil" oftype ValidStadtteil,
+            "standort" oftype text,
+            "baumart_botanisch" oftype text,
+            "id" oftype ValidGeoPoint,
+            "baumfamilie" oftype text 
+        ];
+    }
+
+    block TreeLoader oftype SQLiteLoader {
+        table: 'trees';
+        file: './trees.sqlite';
+    }
+}
+
+valuetype ValidStadtteil oftype text {
+    constraints : [
+        StartsWithFurth
+    ]; 
+}
+
+constraint StartsWithFurth on text :
+    value matches /^Furth-.*/;
+
+valuetype ValidGeoPoint oftype text {
+    constraints : [
+        GeoCoordinate
+    ];
+}
+
+constraint GeoCoordinate on text :
+    value matches /^\d{1,3}\.\d+,\s\d{1,3}\.\d+$/;
