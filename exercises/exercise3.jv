@@ -13,7 +13,9 @@ pipeline GoodsTransportedByTrainPipeline {
         url: "https://www-genesis.destatis.de/genesis/downloads/00/tables/46131-0014_00.csv";
     }
 
-    block GoodsTransportedByTrainTextFileInterpreter oftype TextFileInterpreter {}
+    block GoodsTransportedByTrainTextFileInterpreter oftype TextFileInterpreter {
+        encoding: "latin2";
+    }
     
     block GoodsTransportedByTrainCSVInterpreter oftype CSVInterpreter {
         delimiter: ';';
